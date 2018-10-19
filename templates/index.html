@@ -1,10 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Speed Trig Generator</title>
-</head>
-<body>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello Bulma!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+      <script>
+          function inverse() {
+              document.getElementById("inverse").className = "button is-danger";
+              document.getElementById("regular").className = "button";
+          }
+          function regular() {
+              document.getElementById("regular").className = "button is-danger";
+              document.getElementById("inverse").className = "button";
+          }
+      </script>
+      <style>
+        .mystyle {
+            width: 300px;
+            height: 100px;
+            background-color: coral;
+            text-align: center;
+            font-size: 25px;
+            color: white;
+            margin-bottom: 10px;
+        }
+      </style>
+  </head>
+  <body>
+  <br/>
+  <div class="container" style="gap: 45% !important;">
+      <section class="section is-paddingless">
+        <div class="container has-text-centered">
+          <h1 class="title is-1">Speed Trig Generator</h1>
+          <h3 class="subtitle is-4 is-italic">A latex speed trig worksheet generator</h3>
+        </div>
+        <div class="container has-text-centered">
+            <br/><br/><br/>
+            <h1 class="title is-3">Options</h1>
+            <h3 class="subtitle is-5 is-italic">Start by choosing your preferred options for the worksheet:</h3>
+            <br/>
 
-</body>
+            <h1 class="title is-6">Is this a regular trig worksheet or an inverse trig worksheet?</h1>
+            <nav class="level">
+              <div class="level-item has-text-centered"></div>
+              <div class="level-item has-text-centered"></div>
+
+              <div class="level-item has-text-centered">
+                  <div>
+                    <a class="button is-danger" id="regular" onclick="regular()">Regular</a>
+                </div>
+              </div>
+              <div class="level-item has-text-centered">
+                <div>
+                    <a class="button" id="inverse" onclick="inverse()">Inverse</a>
+                </div>
+              </div>
+
+              <div class="level-item has-text-centered"></div>
+              <div class="level-item has-text-centered"></div>
+            </nav>
+            <br/>
+            <h1 class="title is-6">Which type of trig functions do you want to use?</h1>
+            <nav class="level">
+                <p class="level-item has-text-centered">
+                  <label class="checkbox">
+                      <input type="checkbox"> Normal Trig Functions (e.g. sin, cos, tan)</input><br/><br/>
+                      <input type="checkbox"> Inverse Trig Functions (e.g. csc, sec, cot)</input>
+                  </label>
+                </p>
+            </nav>
+            <br/>
+            <h1 class="title is-6">What percent chance do you want of values greater than 2&#960?</h1>
+        </div>
+      </section>
+  </div>
+  </body>
 </html>
