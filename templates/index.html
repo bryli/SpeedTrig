@@ -6,7 +6,7 @@
     <title>Speed Trig Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-      <script>
+      <!--<script>
           function inverse() {
               document.getElementById("inverse").className = "button is-danger";
               document.getElementById("regular").className = "button";
@@ -14,6 +14,18 @@
           function regular() {
               document.getElementById("regular").className = "button is-danger";
               document.getElementById("inverse").className = "button";
+          }
+      </script>-->
+      <script>
+          function override() {
+              if(document.getElementById('over_y').checked) {
+                  document.getElementById('override').style.display = 'block';
+                  document.getElementById('defaultG').style.display = 'none';
+              }
+              else{
+                  document.getElementById('override').style.display = 'none';
+                  document.getElementById('defaultG').style.display = 'block';
+              }
           }
       </script>
       <style>
@@ -34,45 +46,34 @@
       <section class="section is-paddingless">
         <div class="container has-text-centered">
           <h1 class="title is-1">Speed Trig Generator</h1>
-          <h3 class="subtitle is-4 is-italic">A latex speed trig worksheet generator</h3>
+          <h3 class="subtitle is-4 is-italic">A LaTeX speed trig worksheet generator</h3>
         </div>
         <div class="container has-text-centered">
-            <br/><br/><br/>
+            <br/><br/>
             <h1 class="title is-3">Options</h1>
-            <h3 class="subtitle is-5 is-italic">Start by choosing your preferred options for the worksheet:</h3>
-            <br/>
-
-            <h1 class="title is-6">Is this a regular trig worksheet or an inverse trig worksheet?</h1>
-            <nav class="level">
-              <div class="level-item has-text-centered"></div>
-              <div class="level-item has-text-centered"></div>
-
-              <div class="level-item has-text-centered">
-                  <div>
-                    <a class="button is-danger" id="regular" onclick="regular()">Regular</a>
-                </div>
-              </div>
-              <div class="level-item has-text-centered">
-                <div>
-                    <a class="button" id="inverse" onclick="inverse()">Inverse</a>
-                </div>
-              </div>
-
-              <div class="level-item has-text-centered"></div>
-              <div class="level-item has-text-centered"></div>
-            </nav>
-            <br/>
+            <h3 class="subtitle is-5 is-italic">Start by choosing your preferred options for the worksheet:</h3><br/>
             <h1 class="title is-6">Which type of trig functions do you want to use?</h1>
-            <nav class="level">
-                <p class="level-item has-text-centered">
-                  <label class="checkbox">
-                      <input type="checkbox"> Normal Trig Functions (e.g. sin, cos, tan)</input><br/><br/>
-                      <input type="checkbox"> Inverse Trig Functions (e.g. csc, sec, cot)</input>
-                  </label>
-                </p>
-            </nav>
+            <form>
+                <label class="checkbox"><input type="checkbox" name="funcs" id="norm">  Normal Trig Functions (sin, cos, tan)</label>
+                <br/><br/>
+                <label class="checkbox"><input type="checkbox" name="funcs" id="reci">  Reciprocal Trig Functions (csc, sec, cot)</label>
+                <br/><br/>
+                <label class="checkbox"><input type="checkbox" name="funcs" id="invnorm">  Inverse Normal Trig Functions (arcsin, arccos, arctan)</label>
+                <br/><br/>
+                <label class="checkbox"><input type="checkbox" name="funcs" id="invreci">  Inverse Reciprocal Trig Functions (arccsc, arcsec, arccot)</label>
+            </form>
             <br/>
-            <h1 class="title is-6">What percent chance do you want of values greater than 2&#960?</h1>
+            <h2><b>OVERRIDE:</b> Exact number of questions with values greater than 2&#960</h2>
+            <label class="checkbox"><input type="radio" name="override" id="over_y" onclick="override();">  Yes</label>
+            <label class="checkbox"><input type="radio" name="override" id="over_n" onclick="override();" checked="checked">  No</label>
+            <br/><br/>
+            <div id="defaultG" style="display:block;">
+                <h1 class="title is-6">How often should values greater than 2&#960 appear on the worksheet?</h1>
+                <input type="number" name="chance" id="chance" min="0" max="100" value="40">
+            </div>
+            <div id="override" style="display:none;"><h1 class="title is-6">How many values greater than 2&#960 should be on the worksheet?</h1>
+                <input type="number" name="amount" id="amount" min="0" max="100" value="2"></div>
+
         </div>
       </section>
   </div>
