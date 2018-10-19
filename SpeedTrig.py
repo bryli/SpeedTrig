@@ -7,6 +7,10 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
+@app.route('/generated', methods=['GET', 'POST'])
+def generated():
+    print(request.form.get("chance"))
+    return render_template('generated.html')
 
 
 if __name__ == '__main__':
