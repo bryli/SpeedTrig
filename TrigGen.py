@@ -21,7 +21,7 @@ NORM_NUMER = {1:(0, 1), 2:(1, 3), 3:(1, 2, 4, 5), 4:(1, 3, 5, 7), 6:(1, 3, 5, 7,
 
 def main(enabled, rangeNum, chOrAmt=True):
     problems = getProblems(enabled, rangeNum, chOrAmt)
-    with open(join(dirname(abspath(__file__)), "template_quiz.tex"), 'r') as file:
+    with open(join(dirname(abspath(__file__)), "templates/template_quiz.tex"), 'r') as file:
         quiz = file.read()
     for count in range(12):
         quiz.replace("(((prob" + str(count+1) + ")))", problems[count])
