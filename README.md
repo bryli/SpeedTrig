@@ -9,7 +9,7 @@ Change requirements for running req script:
 Run req script:
 `./reqs.sh`
 
-*Or just copy: *
+ *Or just copy:*
 
 ```
 chmod +x reqs.sh
