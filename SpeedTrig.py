@@ -12,13 +12,11 @@ def home():
 
 @app.route('/generated-quiz', methods=['GET', 'POST'])
 def generated():
-    print(request.form)
     ### norm is a Boolean for whether the Normal Trig Functions option was selected.
     # True if selected
     # False if not selected
     norm = "norm" in request.form
     print(norm)
-
     ### reci is a Boolean for whether the Reciprocal Trig Functions option was selected.
     # True if selected
     # False if not selected
