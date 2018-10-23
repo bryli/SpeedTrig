@@ -100,6 +100,8 @@ def get_rand_rad(norm=True):
 
 def get_frac(numer, denom):
     frac = Fraction(numer, denom)
+    if frac.nominator == 0:
+        return "(0)"
     if frac.denominator == 1:
         return "(" + (str(frac.numerator) if frac.numerator not in (1, -1) else "") + r"\pi)"
-    return (r"{(\frac{" + (str(frac.numerator) if frac.numerator not in (1, -1) else "") if frac.numerator >= 0 else (r"{(-\frac{" + (str(-frac.numerator) if frac.numerator not in (1, -1) else "-"))) + r"\pi}{" + str(frac.denominator) + "})}"
+    return (r"{(\frac{" + (str(frac.numerator) if frac.numerator not in (1, -1) else "") if frac.numerator > 0 else (r"{(-\frac{" + (str(abs(frac.numerator)) if frac.numerator not in (1, -1) else ""))) + r"\pi}{" + str(frac.denominator) + "})}"
