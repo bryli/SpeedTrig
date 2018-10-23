@@ -26,7 +26,9 @@ FIND_FILE = re.compile(r"tmp/(.*).tex")
 DENOM = (1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 6, 6, 6, 6, 6, 6)
 NORM_NUMER = {1:(0, 1), 2:(1, 3), 3:(1, 2, 4, 5), 4:(1, 3, 5, 7), 6:(1, 3, 5, 7, 9, 11)}
 
-def createTex(enabled, outRange, rangeNum, chOrAmt=True):
+#### Creates the PDF based on the output of the get_problems function.
+# [ALL INPUTS] Equivalent to that of method `get_problems`.
+def create_tex(enabled, outRange, rangeNum, chOrAmt=True):
     problems = get_problems(enabled, outRange, rangeNum, chOrAmt)
     if problems == ('', 204):
         return ('', 204)
@@ -45,6 +47,11 @@ def createTex(enabled, outRange, rangeNum, chOrAmt=True):
     # call("pdflatex -output-directory=" + folder + join(dirname(abspath(__file__)), "tmp/", tmp.name), shell=True)
     # return (filename, folder)
 
+###### Generates the functions to be used ######
+# [INPUT 1: enabled (bool[])] List of booleans to choose functions to use
+# [INPUT 2: outRange (bool)] True if inputs out of normal range are enabled, else False
+# [INPUT 3: rangeNum (int)] Number determining % chance of inputs or exact amount out of normal range (i.e., [0, 2π))
+# [INPUT 4: chrOrAmt (bool)] Indicates whether rangeNum refers to the % chance (True) or the exact amount (False)
 def get_problems(enabled, outRange, rangeNum, chOrAmt=True):
     funcs = []
     if not any(enabled):
@@ -59,12 +66,16 @@ def get_problems(enabled, outRange, rangeNum, chOrAmt=True):
         funcs.extend(TRIG_INV_RECI)
     return get_func_inputs(funcs, outRange, [rangeNum, chOrAmt])
 
+###### Parses options given from index.html, generates random list of functions ######
+# Uses set to ensure that no duplicate problems are generated
+# [INPUT 1: funcs (set(string[]))] Set of functions to be generated within quiz
+# [INPUT 2: outRange (bool)] True if inputs out of normal range are enabled, else False
+# [INPUT 3: rangeInfo (tuple(int, bool))] Whether % chance or set # should be used, and the value to be used with said calculations
 def get_func_inputs(funcs, outRange, rangeInfo=(0, False)):
     normFuncs = 12
     res = []
     rng = []
     output = set()
-    curProb = {}
     for count in range(12):
         funcChoice = choice(funcs)
         res.append(funcChoice)
@@ -91,6 +102,8 @@ def get_func_inputs(funcs, outRange, rangeInfo=(0, False)):
 def get_rand_frac():
     return
 
+###### Generates a random fraction (multiple of π/4 or π/6) given whether the output should be within [0, 2π) ######
+# [INPUT 1: norm (bool)] True if output should be within [0, 2π), else False
 def get_rand_rad(norm=True):
     curDenom = choice(DENOM)
     if norm:
@@ -98,9 +111,14 @@ def get_rand_rad(norm=True):
     else:
         return get_frac(choice(NORM_NUMER[curDenom]) + (-1 if randint(0, 1) == 0 else 1) * randrange(2, 5, 2) * curDenom, curDenom)
 
+
+###### Formats latex fraction based on inputs. ######
+# [INPUT 1: numerator (int)] Numerator
+# [INPUT 2: denominator (int)] Denominator
+# Automatically simplified via the fraction class.
 def get_frac(numer, denom):
     frac = Fraction(numer, denom)
-    if frac.nominator == 0:
+    if frac.numerator == 0:
         return "(0)"
     if frac.denominator == 1:
         return "(" + (str(frac.numerator) if frac.numerator not in (1, -1) else "") + r"\pi)"

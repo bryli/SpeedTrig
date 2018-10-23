@@ -68,7 +68,7 @@ def generated():
         num = int(request.form["chance"])
     print(num)
 
-    quiz = TrigGen.createTex([norm, reci, invnorm, invreci], inc, num, override)
+    quiz = TrigGen.create_tex([norm, reci, invnorm, invreci], inc, num, override)
     if quiz == ('', 204):
         return ('', 204)
 
