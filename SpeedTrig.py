@@ -53,7 +53,7 @@ def generated():
     print(override)
 
     if "num" in request.form and "chance" in request.form:
-        num = int(request.form["num"]) if override else int(request.form["chance"])
+        num = int(request.form["chance"]) if override else int(request.form["num"])
     else:
         num = 0
     print(num)
