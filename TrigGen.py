@@ -1,33 +1,48 @@
 from fractions import Fraction
 from random import choice, randint, randrange, shuffle
 from os.path import dirname, abspath, join
+# from os import mkdir, remove
+# from subprocess import call
+# import tempfile
+from latex import build_pdf
+import re
 
-TRIG_BASE = ("\\sin", "\\cos", "\\tan")
-TRIG_RECI = ("\\csc", "\\sec", "\\cot")
-TRIG_INV_BASE = ("\\arcsin", "\\arccos", "\\arctan")
-TRIG_INV_RECI = ("\\arccsc", "\\arcsec", "\\arccot")
+TRIG_BASE = (r"\sin", r"\cos", r"\tan")
+TRIG_RECI = (r"\csc", r"\sec", r"\cot")
+TRIG_INV_BASE = (r"\arcsin", r"\arccos", r"\arctan")
+TRIG_INV_RECI = (r"\arccsc", r"\arcsec", r"\arccot")
 
-#\\frac{1}{\\sqrt{3}}
-ARCTAN_IN = ("\\frac{1}{\\sqrt{3}}", "1", "\\sqrt{3}", "\\infinity",
-             "-\\sqrt{3}", "-1", "-\\frac{1}{\\sqrt{3}}", "0")
-#\\frac{1}{\\sqrt{2}}
-ARCSIN_COS = ("-1", "-\\frac{\\sqrt{3}}{2}", "-\\frac{\\sqrt{2}}{2}", "-\\frac{1}{2}", "0",
-             "\\frac{1}{2}", "\\frac{\\sqrt{2}}{2}", "\\frac{sqrt{3}}{2}", "1")
+#\frac{1}{\sqrt{3}}
+ARCTAN_IN = (r"\frac{1}{\sqrt{3}}", "1", r"\sqrt{3}", r"\infinity",
+             r"-\sqrt{3}", "-1", r"-\frac{1}{\sqrt{3}}", "0")
+#\frac{1}{\sqrt{2}}
+ARCSIN_COS = ("-1", r"-\frac{\sqrt{3}}{2}", r"-\frac{\sqrt{2}}{2}", r"-\frac{1}{2}", "0",
+             r"\frac{1}{2}", r"\frac{\sqrt{2}}{2}", r"\frac{sqrt{3}}{2}", "1")
 OUT_DOM = () # NOT IMPLEMENTED
 
+FIND_FILE = re.compile(r"tmp/(.*).tex")
 
 DENOM = (1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 6, 6, 6, 6, 6, 6)
 NORM_NUMER = {1:(0, 1), 2:(1, 3), 3:(1, 2, 4, 5), 4:(1, 3, 5, 7), 6:(1, 3, 5, 7, 9, 11)}
 
-def main(enabled, rangeNum, chOrAmt=True):
-    problems = getProblems(enabled, rangeNum, chOrAmt)
-    with open(join(dirname(abspath(__file__)), "templates/template_quiz.tex"), 'r') as file:
-        quiz = file.read()
+def createTex(enabled, outRange, rangeNum, chOrAmt=True):
+    problems = get_problems(enabled, outRange, rangeNum, chOrAmt)
+    with open(join(dirname(abspath(__file__)), "templates/template_quiz.tex"), 'rb') as file:
+        quiz = file.read().decode()
     for count in range(12):
-        quiz.replace("(((prob" + str(count+1) + ")))", problems[count])
-    return quiz
+        quiz = quiz.replace("(((prob" + str(count+1) + ")))", problems.pop())
+    return build_pdf(quiz)
+    # tmp = tempfile.NamedTemporaryFile(suffix=".tex", dir=join(dirname(abspath(__file__)), "tmp/"), delete=False)
+    # tmp.write(quiz.encode())
+    # tmp.close()
+    # tmpfile = FIND_FILE.search(tmp.name).group(1)
+    # folder = join(dirname(abspath(__file__)), "tmp/", tmpfile)
+    # filename = join(folder, tmpfile + ".pdf")
+    # mkdir(folder)
+    # call("pdflatex -output-directory=" + folder + join(dirname(abspath(__file__)), "tmp/", tmp.name), shell=True)
+    # return (filename, folder)
 
-def getProblems(enabled, rangeNum, chOrAmt=True):
+def get_problems(enabled, outRange, rangeNum, chOrAmt=True):
     funcs = []
     if enabled[0]:
         funcs.extend(TRIG_BASE)
@@ -37,9 +52,9 @@ def getProblems(enabled, rangeNum, chOrAmt=True):
         funcs.extend(TRIG_INV_BASE)
     if enabled[3]:
         funcs.extend(TRIG_INV_RECI)
-    return getFuncInputs(funcs, [rangeNum, chOrAmt])
+    return get_func_inputs(funcs, outRange, [rangeNum, chOrAmt])
 
-def getFuncInputs(funcs, rangeInfo=(0, False)):
+def get_func_inputs(funcs, outRange, rangeInfo=(0, False)):
     normFuncs = 12
     res = []
     rng = []
@@ -49,35 +64,37 @@ def getFuncInputs(funcs, rangeInfo=(0, False)):
         funcChoice = choice(funcs)
         res.append(funcChoice)
         if any(funcChoice in x for x in (TRIG_BASE, TRIG_RECI)):
-            if rangeInfo[1]:
+            if not outRange and rangeInfo[1]:
                 rng.append((False if randint(0, 100) < rangeInfo[0] else True))
         else:
             normFuncs-=1
-    if not rangeInfo[1]:
+    if not outRange and not rangeInfo[1]:
         rng = [False]*rangeInfo[0] + [True]*max(normFuncs - rangeInfo[0], 0)
         shuffle(rng)
+    if outRange:
+        rng = [True]*12
     for index, item in enumerate(res):
         if any(item in x for x in (TRIG_BASE, TRIG_RECI)):
-            output.append(item + getRandRad(rng.pop(0)))
+            output.add(item + get_rand_rad(rng[index]))
             while len(output) != index + 1:
-                output.append(item + getRandRad(rng.pop(0)))
+                output.add(item + get_rand_rad(rng[index]))
     return output
 
 
 
 
-def getRandFrac():
+def get_rand_frac():
     return
 
-def getRandRad(norm=True):
+def get_rand_rad(norm=True):
     curDenom = choice(DENOM)
     if norm:
-        return getFrac(choice(NORM_NUMER[curDenom]), curDenom)
+        return get_frac(choice(NORM_NUMER[curDenom]), curDenom)
     else:
-        return getFrac(choice(NORM_NUMER[curDenom]) + (-1 if randint(0, 1) == 0 else 1) * randrange(2, 5, 2) * curDenom, curDenom)
+        return get_frac(choice(NORM_NUMER[curDenom]) + (-1 if randint(0, 1) == 0 else 1) * randrange(2, 5, 2) * curDenom, curDenom)
 
-def getFrac(numer, denom):
+def get_frac(numer, denom):
     frac = Fraction(numer, denom)
     if frac.denominator == 1:
-        return (str(frac.numerator) if frac.numerator != 1 else "") + "\\pi"
-    return "{\\frac{" + str(frac.numerator) + "\\pi}{" + str(frac.denominator) + "}}"
+        return "(" + (str(frac.numerator) if frac.numerator not in (1, -1) else "") + r"\pi)"
+    return (r"{(\frac{" + (str(frac.numerator) if frac.numerator not in (1, -1) else "") if frac.numerator >= 0 else (r"{(-\frac{" + (str(-frac.numerator) if frac.numerator not in (1, -1) else "-"))) + r"\pi}{" + str(frac.denominator) + "})}"

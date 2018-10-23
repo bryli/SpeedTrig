@@ -1,4 +1,7 @@
-from flask import Flask, request, url_for, redirect, render_template, session
+from flask import Flask, request, url_for, redirect, render_template, session, send_file
+from io import BytesIO
+import TrigGen
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -9,11 +12,12 @@ def home():
 
 @app.route('/generated', methods=['GET', 'POST'])
 def generated():
+    print(request.form)
     ### norm is a Boolean for whether the Normal Trig Functions option was selected.
     # True if selected
     # False if not selected
     norm = False
-    if(request.form.get("norm") == "on"):
+    if("norm" in request.form):
         norm = True
     print(norm)
 
@@ -21,7 +25,7 @@ def generated():
     # True if selected
     # False if not selected
     reci = False
-    if(request.form.get("reci") == "on"):
+    if("reci" in request.form):
         reci = True
     print(reci)
 
@@ -29,7 +33,7 @@ def generated():
     # True if selected
     # False if not selected
     invnorm = False
-    if(request.form.get("invnorm") == "on"):
+    if("invnorm" in request.form):
         invnorm = True
     print(invnorm)
 
@@ -37,21 +41,34 @@ def generated():
     # True if selected
     # False if not selected
     invreci = False
-    if(request.form.get("invreci") == "on"):
+    if("invreci" in request.form):
         invreci = True
     print(invreci)
 
-    ### override is a Boolean for whether the user wants exact number or perecnt.
+    ### inc is a Boolean for whether the user wants values above 2π or below 0.
+    # True if selected
+    # False if not selected
+    inc = False
+    if (request.form["inc"] == "yes"):
+        inc = True
+    print(inc)
+
+    ### override is a Boolean for whether the user wants exact number or percent.
     # True if selected
     # False if not selected
     override = False
-    if(request.form.get("override") == "on"):
+    if(request.form["override"] == "yes"):
         override = True
     print(override)
 
-    chance = int(request.form.get("chance"))
-    print(chance)
-    return render_template('generated.html')
+    if override:
+        num = int(request.form["num"])
+    else:
+        num = int(request.form["chance"])
+    print(num)
+
+    return send_file(BytesIO(bytes(TrigGen.createTex([norm, reci, invnorm, invreci], inc, num, override))),
+                     mimetype="application/pdf", attachment_filename="Quiz"+datetime.now().strftime(" %Y-%m-%d at %H:%M:%S.pdf"))
 
 
 if __name__ == '__main__':
