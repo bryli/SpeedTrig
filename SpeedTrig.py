@@ -1,5 +1,4 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-from flask import Flask, request, url_for, redirect, render_template, session, send_file
+from flask import Flask, request, render_template, send_file
 from io import BytesIO
 import TrigGen
 from datetime import datetime
