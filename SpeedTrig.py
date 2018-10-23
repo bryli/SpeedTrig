@@ -69,7 +69,7 @@ def generated():
 
     return send_file(BytesIO(bytes(TrigGen.createTex([norm, reci, invnorm, invreci], inc, num, override))),
                      mimetype="application/pdf", as_attachment=True,
-                     attachment_filename="Quiz"+datetime.now().strftime(" %Y-%m-%d at %H.%M.%S.pdf"))
+                     attachment_filename="Speed Trig Quiz"+datetime.now().strftime(" %Y-%m-%d at %H.%M.%S.pdf"))
 
 
 if __name__ == '__main__':
