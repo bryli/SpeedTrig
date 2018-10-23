@@ -1,2 +1,2 @@
-pip3 install latex
-pip3 install flask
+sudo pip3 install latex
+sudo pip3 install flask
