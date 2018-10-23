@@ -3,77 +3,67 @@ from flask import Flask, request, url_for, redirect, render_template, session, s
 from io import BytesIO
 import TrigGen
 from datetime import datetime
-from secrets import token_hex
+from os import urandom
+from binascii import b2a_hex
 
 app = Flask(__name__)
-app.secret_key = token_hex(32)
+app.secret_key = b2a_hex(urandom(8))
 @app.route('/', methods=['GET', 'POST'])
 def home():
     return render_template('index.html')
 
-@app.route('/generated', methods=['GET', 'POST'])
+
+@app.route('/generated-quiz', methods=['GET', 'POST'])
 def generated():
     print(request.form)
     ### norm is a Boolean for whether the Normal Trig Functions option was selected.
     # True if selected
     # False if not selected
-    norm = False
-    if("norm" in request.form):
-        norm = True
+    norm = "norm" in request.form
     print(norm)
 
     ### reci is a Boolean for whether the Reciprocal Trig Functions option was selected.
     # True if selected
     # False if not selected
-    reci = False
-    if("reci" in request.form):
-        reci = True
+    reci = "reci" in request.form
     print(reci)
 
     ### invnorm is a Boolean for whether the Inverse Normal Trig Functions option was selected.
     # True if selected
     # False if not selected
-    invnorm = False
-    if("invnorm" in request.form):
-        invnorm = True
+    invnorm = "invnorm" in request.form
     print(invnorm)
 
     ### invreci is a Boolean for whether the Inverse Reciprocal Trig Functions option was selected.
     # True if selected
     # False if not selected
-    invreci = False
-    if("invreci" in request.form):
-        invreci = True
+    invreci = "invreci" in request.form
     print(invreci)
 
     ### inc is a Boolean for whether the user wants values above 2π or below 0.
     # True if selected
     # False if not selected
-    inc = False
-    if (request.form["inc"] == "yes"):
-        inc = True
+    inc = True if request.form["inc"] == "yes" else False
     print(inc)
 
     ### override is a Boolean for whether the user wants exact number or percent.
     # True if selected
     # False if not selected
-    override = False
-    if(request.form["override"] == "yes"):
-        override = True
+    override = True if request.form["override"] == "yes" else False
     print(override)
 
-    if override:
-        num = int(request.form["num"])
-    else:
-        num = int(request.form["chance"])
+
+    num = int(request.form["num"]) if override else int(request.form["chance"])
     print(num)
+
+    dl = "dl" in request.form
 
     quiz = TrigGen.create_tex([norm, reci, invnorm, invreci], inc, num, override)
     if quiz == ('', 204):
         return ('', 204)
 
     return send_file(BytesIO(bytes(quiz)),
-                     mimetype="application/pdf", as_attachment=True,
+                     mimetype="application/pdf", as_attachment=dl,
                      attachment_filename="Speed Trig Quiz"+datetime.now().strftime(" %Y-%m-%d at %H.%M.%S.pdf"))
 
 
