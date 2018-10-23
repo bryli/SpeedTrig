@@ -2,10 +2,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from fractions import Fraction
 from random import choice, randint, randrange, shuffle
 from os.path import dirname, abspath, join
-# from os import mkdir, remove
-# from subprocess import call
-# import tempfile
-from latex import build_pdf
+try:
+    from latex import build_pdf
+except Exception:
+    pass
 import re
 
 TRIG_BASE = (r"\sin", r"\cos", r"\tan")
@@ -52,7 +52,7 @@ def create_tex(enabled, outRange, rangeNum, chOrAmt=True):
 # [INPUT 2: outRange (bool)] True if inputs out of normal range are enabled, else False
 # [INPUT 3: rangeNum (int)] Number determining % chance of inputs or exact amount out of normal range (i.e., [0, 2π))
 # [INPUT 4: chrOrAmt (bool)] Indicates whether rangeNum refers to the % chance (True) or the exact amount (False)
-def get_problems(enabled, outRange, rangeNum, chOrAmt=True):
+def get_problems(enabled, outRange, rangeNum, chOrAmt):
     funcs = []
     if not any(enabled):
         return ('', 204)
@@ -109,7 +109,7 @@ def get_rand_rad(norm=True):
     if norm:
         return get_frac(choice(NORM_NUMER[curDenom]), curDenom)
     else:
-        return get_frac(choice(NORM_NUMER[curDenom]) + (-1 if randint(0, 1) == 0 else 1) * randrange(2, 5, 2) * curDenom, curDenom)
+        return get_frac(choice(NORM_NUMER[curDenom]) + (-1 if randint(0, 1) == 0 else 1) * 2 * curDenom, curDenom)
 
 
 ###### Formats latex fraction based on inputs. ######
@@ -123,3 +123,14 @@ def get_frac(numer, denom):
     if frac.denominator == 1:
         return "(" + (str(frac.numerator) if frac.numerator not in (1, -1) else "") + r"\pi)"
     return (r"{(\frac{" + (str(frac.numerator) if frac.numerator not in (1, -1) else "") if frac.numerator > 0 else (r"{(-\frac{" + (str(abs(frac.numerator)) if frac.numerator not in (1, -1) else ""))) + r"\pi}{" + str(frac.denominator) + "})}"
+
+
+def test_tex(enabled, outRange, rangeNum, chOrAmt):
+    problems = get_problems(enabled, outRange, rangeNum, chOrAmt)
+    if problems == ('', 204):
+        return ('', 204)
+    with open(join(dirname(abspath(__file__)), "templates/template_quiz.tex"), 'rb') as file:
+        quiz = file.read().decode()
+    for count in range(12):
+        quiz = quiz.replace("(((prob" + str(count+1) + ")))", problems.pop())
+    return quiz.encode()

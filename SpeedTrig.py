@@ -60,7 +60,12 @@ def generated():
     print(num)
 
     dl = "dl" in request.form
-
+    if app.config['TESTING']:
+        quiz = TrigGen.test_tex([norm, reci, invnorm, invreci], inc, num, override)
+        if quiz == ('', 204):
+            return ('', 204)
+        return send_file(BytesIO(quiz), as_attachment=dl, mimetype="text/x-tex",
+                                 attachment_filename="Speed Trig Quiz"+datetime.now().strftime(" %Y-%m-%d at %H.%M.%S.pdf"))
     quiz = TrigGen.create_tex([norm, reci, invnorm, invreci], inc, num, override)
     if quiz == ('', 204):
         return ('', 204)
