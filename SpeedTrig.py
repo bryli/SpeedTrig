@@ -38,17 +38,25 @@ def generated():
     ### inc is a Boolean for whether the user wants values above 2π or below 0.
     # True if selected
     # False if not selected
-    inc = True if request.form["inc"] == "yes" else False
+    if "inc" in request.form:
+        inc = True if request.form["inc"] == "yes" else False
+    else:
+        inc = False
     print(inc)
 
     ### override is a Boolean for whether the user wants exact number or percent.
     # True if selected
     # False if not selected
-    override = True if request.form["override"] == "yes" else False
+    if "override" in request.form:
+        override = True if request.form["override"] == "yes" else False
+    else:
+        override = False
     print(override)
 
-
-    num = int(request.form["num"]) if override else int(request.form["chance"])
+    if "num" in request.form and "chance" in request.form:
+        num = int(request.form["num"]) if override else int(request.form["chance"])
+    else:
+        num = 0
     print(num)
 
     dl = "dl" in request.form
