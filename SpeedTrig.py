@@ -1,11 +1,12 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
 from flask import Flask, request, url_for, redirect, render_template, session, send_file
 from io import BytesIO
 import TrigGen
 from datetime import datetime
+from secrets import token_hex
 
 app = Flask(__name__)
-
-
+app.secret_key = token_hex(32)
 @app.route('/', methods=['GET', 'POST'])
 def home():
     return render_template('index.html')
@@ -67,7 +68,11 @@ def generated():
         num = int(request.form["chance"])
     print(num)
 
-    return send_file(BytesIO(bytes(TrigGen.createTex([norm, reci, invnorm, invreci], inc, num, override))),
+    quiz = TrigGen.createTex([norm, reci, invnorm, invreci], inc, num, override)
+    if quiz == ('', 204):
+        return ('', 204)
+
+    return send_file(BytesIO(bytes(quiz)),
                      mimetype="application/pdf", as_attachment=True,
                      attachment_filename="Speed Trig Quiz"+datetime.now().strftime(" %Y-%m-%d at %H.%M.%S.pdf"))
 

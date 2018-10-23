@@ -1,3 +1,4 @@
+from __future__ import absolute_import, division, print_function, unicode_literals
 from fractions import Fraction
 from random import choice, randint, randrange, shuffle
 from os.path import dirname, abspath, join
@@ -27,6 +28,8 @@ NORM_NUMER = {1:(0, 1), 2:(1, 3), 3:(1, 2, 4, 5), 4:(1, 3, 5, 7), 6:(1, 3, 5, 7,
 
 def createTex(enabled, outRange, rangeNum, chOrAmt=True):
     problems = get_problems(enabled, outRange, rangeNum, chOrAmt)
+    if problems == ('', 204):
+        return ('', 204)
     with open(join(dirname(abspath(__file__)), "templates/template_quiz.tex"), 'rb') as file:
         quiz = file.read().decode()
     for count in range(12):
@@ -44,6 +47,8 @@ def createTex(enabled, outRange, rangeNum, chOrAmt=True):
 
 def get_problems(enabled, outRange, rangeNum, chOrAmt=True):
     funcs = []
+    if not any(enabled):
+        return ('', 204)
     if enabled[0]:
         funcs.extend(TRIG_BASE)
     if enabled[1]:
@@ -64,14 +69,14 @@ def get_func_inputs(funcs, outRange, rangeInfo=(0, False)):
         funcChoice = choice(funcs)
         res.append(funcChoice)
         if any(funcChoice in x for x in (TRIG_BASE, TRIG_RECI)):
-            if not outRange and rangeInfo[1]:
+            if outRange and rangeInfo[1]:
                 rng.append((False if randint(0, 100) < rangeInfo[0] else True))
         else:
             normFuncs-=1
-    if not outRange and not rangeInfo[1]:
+    if outRange and not rangeInfo[1]:
         rng = [False]*rangeInfo[0] + [True]*max(normFuncs - rangeInfo[0], 0)
         shuffle(rng)
-    if outRange:
+    if not outRange:
         rng = [True]*12
     for index, item in enumerate(res):
         if any(item in x for x in (TRIG_BASE, TRIG_RECI)):
