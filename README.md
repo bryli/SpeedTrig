@@ -1,17 +1,16 @@
+# Speed Trig Quiz Generator
+![Python](https://img.shields.io/badge/python-v3.4+-blue.svg)
+[![Build Status](https://travis-ci.com/bryli/SpeedTrig.svg?token=8Ez5mgKHvWtpcBFrcXhY&branch=master)](https://travis-ci.com/bryli/SpeedTrig)
+
+This Speed Trig quiz generator is a Flask application meant to automatically generate simple trigonometry quizzes.
+
+(Travis-CI mostly used as an experiment with a Flask app.)
+
 ## To Get Started
 
-Go to directory:
-`cd ~/download_location/SpeedTrig/`
+Go to directory and run `pip install -r requirements.txt`:
+`cd ~/download_location/SpeedTrig/ && pip install -r requirements.txt`
 
-Change requirements for running req script:
-`chmod +x reqs.sh`
+To start the application, from the same directory run `export FLASK_APP=SpeedTrig.py` then `flask run`.
 
-Run req script:
-`./reqs.sh`
-
- *Or just copy:*
-
-```
-chmod +x reqs.sh
-./reqs.sh
-```
+This will launch the web application at 127.0.0.1:5000.
