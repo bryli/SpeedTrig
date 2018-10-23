@@ -3,11 +3,8 @@ from flask import Flask, request, url_for, redirect, render_template, session, s
 from io import BytesIO
 import TrigGen
 from datetime import datetime
-from os import urandom
-from binascii import b2a_hex
 
 app = Flask(__name__)
-app.secret_key = b2a_hex(urandom(8))
 @app.route('/', methods=['GET', 'POST'])
 def home():
     return render_template('index.html')
