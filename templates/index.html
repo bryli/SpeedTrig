@@ -1,104 +1,106 @@
 <!DOCTYPE html>
+<!-- Written by Bryan Li and Gautom Das (Class of 2020)-->
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Speed Trig Generator</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-      <!--<script>
-          function inverse() {
-              document.getElementById("inverse").className = "button is-danger";
-              document.getElementById("regular").className = "button";
-          }
-          function regular() {
-              document.getElementById("regular").className = "button is-danger";
-              document.getElementById("inverse").className = "button";
-          }
-      </script>-->
-      <script>
-          function toOverride() {
-              if(document.getElementById('over_y').checked) {
-                  document.getElementById('defaultG').style.display = 'none';
-                  document.getElementById('override').style.display = 'block';
-              }
-              else{
-                  document.getElementById('defaultG').style.display = 'block';
-                  document.getElementById('override').style.display = 'none';
-              }
-          }
-          function ifInclude() {
-              if(document.getElementById('inc_y').checked) {
-                  document.getElementById('ifInclude').style.display = 'block';
-              }
-              else{
-                  document.getElementById('ifInclude').style.display = 'none';
-              }
-          }
-      </script>
-      <style>
-        .mystyle {
-            width: 300px;
-            height: 100px;
-            background-color: coral;
-            text-align: center;
-            font-size: 25px;
-            color: white;
-            margin-bottom: 10px;
-        }
-      </style>
-  </head>
-  <body>
-  <br/>
-  <div class="container" style="gap: 45% !important;">
-      <section class="section is-paddingless">
-        <div class="container has-text-centered">
-          <h1 class="title is-1">Speed Trig Generator</h1>
-          <h3 class="subtitle is-4 is-italic is-danger" style="color: #FF3860;">A LaTeX speed trig worksheet generator</h3>
-        </div>
-        <div class="container has-text-centered">
-            <form action="{{ url_for('generated') }}" method="post">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speed Trig Generator</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  <!--<script>
+      function inverse() {
+          document.getElementById("inverse").className = "button is-danger";
+          document.getElementById("regular").className = "button";
+      }
+      function regular() {
+          document.getElementById("regular").className = "button is-danger";
+          document.getElementById("inverse").className = "button";
+      }
+  </script>-->
+<script>
+  function toOverride() {
+      if(document.getElementById('over_y').checked) {
+          document.getElementById('defaultG').style.display = 'none';
+          document.getElementById('override').style.display = 'block';
+      }
+      else{
+          document.getElementById('defaultG').style.display = 'block';
+          document.getElementById('override').style.display = 'none';
+      }
+  }
+  function ifInclude() {
+      if(document.getElementById('inc_y').checked) {
+          document.getElementById('ifInclude').style.display = 'block';
+      }
+      else{
+          document.getElementById('ifInclude').style.display = 'none';
+      }
+  }
+</script>
+<style>
+.mystyle {
+    width: 300px;
+    height: 100px;
+    background-color: coral;
+    text-align: center;
+    font-size: 25px;
+    color: white;
+    margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+<br/>
+<div class="container" style="gap: 45% !important;">
+    <section class="section is-paddingless">
+    <div class="container has-text-centered">
+        <h1 class="title is-1">Speed Trig Generator</h1>
+        <h3 class="subtitle is-4 is-italic is-danger" style="color: #FF3860;">A LaTeX speed trig worksheet generator</h3>
+        <p>Issues? Report them on <a href="https://github.com/bryli/SpeedTrig">GitHub!</a></p>
+    </div>
+    <div class="container has-text-centered">
+        <form action="{{ url_for('generated') }}" method="post">
+        <br/><br/>
+        <h1 class="title is-3">Options</h1>
+        <h3 class="subtitle is-5 is-italic">Start by choosing your preferred options for the worksheet:</h3><br/>
+        <h1 class="title is-6">Which type of trig functions do you want to use?</h1>
+        <label class="checkbox"><input type="checkbox" name="norm" id="norm" value="on">  Normal Trig Functions (sin, cos, tan)</label>
+        <br/><br/>
+        <label class="checkbox"><input type="checkbox" name="reci" id="reci" value="on">  Reciprocal Trig Functions (csc, sec, cot)</label>
+        <br/><br/>
+        <label class="checkbox"><input type="checkbox" name="invnorm" id="invnorm" value="on">  Inverse Normal Trig Functions (arcsin, arccos, arctan)</label>
+        <br/><br/>
+        <label class="checkbox"><input type="checkbox" name="invreci" id="invreci" value="on">  Inverse Reciprocal Trig Functions (arccsc, arcsec, arccot)</label>
+        <h1 class="title is-6">Inverse Trig Functions NOT working - WIP.</h1>
+        <br/>
+        <h1 class="title is-6">Include numbers greater than or equal to 2&#960 or less than 0?</h1>
+        <label class="checkbox"><input type="radio" name="inc" id="inc_y" onclick="ifInclude();" value="yes">  Yes</label>
+        <label class="checkbox"><input type="radio" name="inc" id="inc_n" onclick="ifInclude();" value="no" checked>  No</label>
+        <div id="ifInclude" style="display:none;">
+            <h2><b>OVERRIDE:</b> Exact number of questions with such inputs</h2><br/>
+            <label class="checkbox"><input type="radio" name="override" id="over_y" onclick="toOverride();" value="yes">  Yes</label>
+            <label class="checkbox"><input type="radio" name="override" id="over_n" onclick="toOverride();" value="no" checked>  No</label>
             <br/><br/>
-            <h1 class="title is-3">Options</h1>
-            <h3 class="subtitle is-5 is-italic">Start by choosing your preferred options for the worksheet:</h3><br/>
-            <h1 class="title is-6">Which type of trig functions do you want to use?</h1>
-            <label class="checkbox"><input type="checkbox" name="norm" id="norm" value="on">  Normal Trig Functions (sin, cos, tan)</label>
-            <br/><br/>
-            <label class="checkbox"><input type="checkbox" name="reci" id="reci" value="on">  Reciprocal Trig Functions (csc, sec, cot)</label>
-            <br/><br/>
-            <label class="checkbox"><input type="checkbox" name="invnorm" id="invnorm" value="on">  Inverse Normal Trig Functions (arcsin, arccos, arctan)</label>
-            <br/><br/>
-            <label class="checkbox"><input type="checkbox" name="invreci" id="invreci" value="on">  Inverse Reciprocal Trig Functions (arccsc, arcsec, arccot)</label>
-            <h1 class="title is-6">Inverse Trig Functions NOT working - WIP.</h1>
-            <br/>
-            <h1 class="title is-6">Include numbers greater than or equal to 2&#960 or less than 0?</h1>
-            <label class="checkbox"><input type="radio" name="inc" id="inc_y" onclick="ifInclude();" value="yes">  Yes</label>
-            <label class="checkbox"><input type="radio" name="inc" id="inc_n" onclick="ifInclude();" value="no" checked>  No</label>
-            <div id="ifInclude" style="display:none;">
-                <h2><b>OVERRIDE:</b> Exact number of questions with such inputs</h2><br/>
-                <label class="checkbox"><input type="radio" name="override" id="over_y" onclick="toOverride();" value="yes">  Yes</label>
-                <label class="checkbox"><input type="radio" name="override" id="over_n" onclick="toOverride();" value="no" checked>  No</label>
-                <br/><br/>
-                <div id="defaultG" style="display:block;">
-                    <h1 class="title is-6">How often (in %) should values greater than or equal to 2&#960 or less than 0 appear on the worksheet for non-inverse trig functions?</h1>
-                      <div class="control" style="width:60px; margin:auto; text-align: center">
-                        <input class="input" style="text-align: center !important;" placeholder="Number" type="number" name="chance" id="chance" min="0" max="100" value="40">
-                      </div>
-                </div>
-                <div id="override" style="display:none;">
-                    <h1 class="title is-6">How many values greater than or equal to 2&#960 or less than 0 should be on the worksheet for non-inverse trig functions?</h1>
-                      <div class="control" style="width:60px; margin:auto; text-align: center">
-                     <input class="input" style="text-align: center !important;" placeholder="Number" type="number" name="num" id="num" min="0" max="12" value="2">
-                  </div>
+            <div id="defaultG" style="display:block;">
+                <h1 class="title is-6">How often (in %) should values greater than or equal to 2&#960 or less than 0 appear on the worksheet for non-inverse trig functions?</h1>
+                    <div class="control" style="width:60px; margin:auto; text-align: center">
+                      <input class="input" style="text-align: center !important;" placeholder="Number" type="number" name="chance" id="chance" min="0" max="100" value="40">
+                    </div>
+            </div>
+            <div id="override" style="display:none;">
+                <h1 class="title is-6">How many values greater than or equal to 2&#960 or less than 0 should be on the worksheet for non-inverse trig functions?</h1>
+                <div class="control" style="width:60px; margin:auto; text-align: center">
+                    <input class="input" style="text-align: center !important;" placeholder="Number" type="number" name="num" id="num" min="0" max="12" value="2">
                 </div>
             </div>
-                <br/><br/>
-            <label class="checkbox"><input type="checkbox" name="dl" id="dl">  Direct Download</label>
-             <br/><br/>
-               <input id="button" class="button is-danger" type="submit" value="Generate">
-            </form>
         </div>
-      </section>
-  </div>
-  </body>
+            <br/><br/>
+        <label class="checkbox"><input type="checkbox" name="dl" id="dl">  Direct Download</label>
+            <br/><br/>
+            <input id="button" class="button is-danger" type="submit" value="Generate">
+        </form>
+    </div>
+    </section>
+</div>
+</body>
 </html>
