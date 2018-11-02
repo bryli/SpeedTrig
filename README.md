@@ -1,6 +1,8 @@
 # Speed Trig Quiz Generator
 ![Python](https://img.shields.io/badge/python-v3.4+-blue.svg)
 [![Build Status](https://travis-ci.com/bryli/SpeedTrig.svg?token=8Ez5mgKHvWtpcBFrcXhY&branch=master)](https://travis-ci.com/bryli/SpeedTrig)
+[![GitHub Issues](https://img.shields.io/github/issues/bryli/SpeedTrig.svg)](https://github.com/bryli/SpeedTrig/issues)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 This Speed Trig quiz generator is a Flask application meant to automatically generate simple trigonometry quizzes.
 
