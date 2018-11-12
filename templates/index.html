@@ -55,49 +55,55 @@
     <section class="section is-paddingless">
     <div class="container has-text-centered">
         <h1 class="title is-1">Speed Trig Generator</h1>
-        <h3 class="subtitle is-4 is-italic is-danger" style="color: #FF3860;">A LaTeX speed trig worksheet generator</h3>
+        <h3 class="subtitle is-4 is-italic is-info" style="color:hsl(204, 86%, 53%)">A LaTeX speed trig worksheet generator</h3>
         <p>Issues? Report them on <a href="https://github.com/bryli/SpeedTrig">GitHub!</a></p>
     </div>
     <div class="container has-text-centered">
         <form action="{{ url_for('generated') }}" method="post">
-        <br/><br/>
-        <h1 class="title is-3">Options</h1>
-        <h3 class="subtitle is-5 is-italic">Start by choosing your preferred options for the worksheet:</h3><br/>
-        <h1 class="title is-6">Which type of trig functions do you want to use?</h1>
-        <label class="checkbox"><input type="checkbox" name="norm" id="norm" value="on">  Normal Trig Functions (sin, cos, tan)</label>
-        <br/><br/>
-        <label class="checkbox"><input type="checkbox" name="reci" id="reci" value="on">  Reciprocal Trig Functions (csc, sec, cot)</label>
-        <br/><br/>
-        <label class="checkbox"><input type="checkbox" name="invnorm" id="invnorm" value="on">  Inverse Normal Trig Functions (arcsin, arccos, arctan)</label>
-        <br/><br/>
-        <label class="checkbox"><input type="checkbox" name="invreci" id="invreci" value="on">  Inverse Reciprocal Trig Functions (arccsc, arcsec, arccot)</label>
-        <h1 class="title is-6">Inverse Trig Functions NOT working - WIP.</h1>
-        <br/>
-        <h1 class="title is-6">Include numbers greater than or equal to 2&#960 or less than 0?</h1>
-        <label class="checkbox"><input type="radio" name="inc" id="inc_y" onclick="ifInclude();" value="yes">  Yes</label>
-        <label class="checkbox"><input type="radio" name="inc" id="inc_n" onclick="ifInclude();" value="no" checked>  No</label>
-        <div id="ifInclude" style="display:none;">
-            <h2><b>OVERRIDE:</b> Exact number of questions with such inputs</h2><br/>
-            <label class="checkbox"><input type="radio" name="override" id="over_y" onclick="toOverride();" value="yes">  Yes</label>
-            <label class="checkbox"><input type="radio" name="override" id="over_n" onclick="toOverride();" value="no" checked>  No</label>
+            <p action="{{ url_for('generated') }}" method="post">
             <br/><br/>
-            <div id="defaultG" style="display:block;">
-                <h1 class="title is-6">How often (in %) should values greater than or equal to 2&#960 or less than 0 appear on the worksheet for non-inverse trig functions?</h1>
-                    <div class="control" style="width:60px; margin:auto; text-align: center">
-                      <input class="input" style="text-align: center !important;" placeholder="Number" type="number" name="chance" id="chance" min="0" max="100" value="40">
-                    </div>
+            <h1 class="title is-3">Options</h1>
+            <h3 class="subtitle is-5 is-italic">Start by choosing your preferred options for the worksheet:</h3><br/>
+            <h1 class="title is-6">What title should be used for the worksheet?</h1>
+            <div class="control" style="width:400px; margin:auto; text-align: center">
+                <input class="input" style="text-align: center !important;" placeholder="Title" type="text" name="title" id="title" value="Speed Trig Quiz">
             </div>
-            <div id="override" style="display:none;">
-                <h1 class="title is-6">How many values greater than or equal to 2&#960 or less than 0 should be on the worksheet for non-inverse trig functions?</h1>
-                <div class="control" style="width:60px; margin:auto; text-align: center">
-                    <input class="input" style="text-align: center !important;" placeholder="Number" type="number" name="num" id="num" min="0" max="12" value="2">
+            <br/>
+            <h1 class="title is-6">Which type of trig functions do you want to use?</h1>
+            <label class="checkbox"><input type="checkbox" name="norm" id="norm" value="on">  Normal Trig Functions (sin, cos, tan)</label>
+            <br/><br/>
+            <label class="checkbox"><input type="checkbox" name="reci" id="reci" value="on">  Reciprocal Trig Functions (csc, sec, cot)</label>
+            <br/><br/>
+            <label class="checkbox"><input type="checkbox" name="invnorm" id="invnorm" value="on">  Inverse Normal Trig Functions (arcsin, arccos, arctan)</label>
+            <br/><br/>
+            <label class="checkbox"><input type="checkbox" name="invreci" id="invreci" value="on">  Inverse Reciprocal Trig Functions (arccsc, arcsec, arccot)</label>
+            <br/><br/>
+            <h1 class="title is-6" style="margin-bottom:10px">Include numbers greater than or equal to 2&#960 or less than 0?</h1>
+            <p class="is-italic" style="font-size:15px">(Does not apply for inverse trig.)</p><br/>
+            <label class="checkbox"><input type="radio" name="inc" id="inc_y" onclick="ifInclude();" value="yes">  Yes</label>
+            <label class="checkbox"><input type="radio" name="inc" id="inc_n" onclick="ifInclude();" value="no" checked>  No</label>
+            <div id="ifInclude" style="display:none;">
+                <h2><b>OVERRIDE:</b> Exact number of questions with such inputs</h2><br/>
+                <label class="checkbox"><input type="radio" name="override" id="over_y" onclick="toOverride();" value="yes">  Yes</label>
+                <label class="checkbox"><input type="radio" name="override" id="over_n" onclick="toOverride();" value="no" checked>  No</label>
+                <br/><br/>
+                <div id="defaultG" style="display:block;">
+                    <h1 class="title is-6">How often (in %) should values greater than or equal to 2&#960 or less than 0 appear on the worksheet for non-inverse trig functions?</h1>
+                        <div class="control" style="width:60px; margin:auto; text-align: center">
+                          <input class="input" style="text-align: center !important;" placeholder="Number" type="number" name="chance" id="chance" min="0" max="100" value="40">
+                        </div>
+                </div>
+                <div id="override" style="display:none;">
+                    <h1 class="title is-6">How many values greater than or equal to 2&#960 or less than 0 should be on the worksheet for non-inverse trig functions?</h1>
+                    <div class="control" style="width:60px; margin:auto; text-align: center">
+                        <input class="input" style="text-align: center !important;" placeholder="Number" type="number" name="num" id="num" min="0" max="12" value="2">
+                    </div>
                 </div>
             </div>
-        </div>
             <br/><br/>
-        <label class="checkbox"><input type="checkbox" name="dl" id="dl">  Direct Download</label>
+            <label class="checkbox"><input type="checkbox" name="dl" id="dl">  Direct Download</label>
             <br/><br/>
-            <input id="button" class="button is-danger" type="submit" value="Generate">
+            <input id="button" class="button is-info" type="submit" value="Generate">
         </form>
     </div>
     </section>

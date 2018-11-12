@@ -13,21 +13,23 @@ TRIG_INV_BASE = (r"\arcsin", r"\arccos", r"\arctan")
 TRIG_INV_RECI = (r"\arccsc", r"\arcsec", r"\arccot")
 
 #\frac{1}{\sqrt{3}}
-ARCTAN_IN = (r"\frac{1}{\sqrt{3}}", "1", r"\sqrt{3}", r"\infinity",
-             r"-\sqrt{3}", "-1", r"-\frac{1}{\sqrt{3}}", "0")
+ARCTAN = (r"\frac{\sqrt{3}}{3}", "1", r"\sqrt{3}", r"\infty",
+             r"-\sqrt{3}", "-1", r"-\frac{\sqrt{3}}{3}", "0")
+ARCCOT = (r"\sqrt{3}", "1", r"\frac{\sqrt{3}}{3}", r"\infty",
+          r"-\sqrt{3}", "-1", r"-\frac{\sqrt{3}}{3}", "0")
+
 #\frac{1}{\sqrt{2}}
 ARCSIN_COS = ("-1", r"-\frac{\sqrt{3}}{2}", r"-\frac{\sqrt{2}}{2}", r"-\frac{1}{2}", "0",
-             r"\frac{1}{2}", r"\frac{\sqrt{2}}{2}", r"\frac{sqrt{3}}{2}", "1")
-OUT_DOM = () # NOT IMPLEMENTED
-
-FIND_FILE = re.compile(r"tmp/(.*).tex")
+             r"\frac{1}{2}", r"\frac{\sqrt{2}}{2}", r"\frac{\sqrt{3}}{2}", "1")
+ARCCSC_SEC = ("-1", r"-\frac{2\sqrt{3}}{3}", r"-\sqrt{2}", "-2", "\infty",
+              "2", r"\sqrt{2}", r"\frac{2\sqrt{3}}{3}", "1")
 
 DENOM = (1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 6, 6, 6, 6, 6, 6)
 NORM_NUMER = {1:(0, 1), 2:(1, 3), 3:(1, 2, 4, 5), 4:(1, 3, 5, 7), 6:(1, 3, 5, 7, 9, 11)}
 
 #### Creates the PDF based on the output of the get_problems function.
 # [ALL INPUTS] Equivalent to that of method `get_problems`.
-def create_tex(enabled, outRange, rangeNum, chOrAmt=True):
+def create_tex(title, enabled, outRange, rangeNum, chOrAmt=True):
     problems = get_problems(enabled, outRange, rangeNum, chOrAmt)
     if problems == ('', 204):
         return ('', 204)
@@ -35,11 +37,9 @@ def create_tex(enabled, outRange, rangeNum, chOrAmt=True):
         quiz = file.read().decode()
     for count in range(12):
         quiz = quiz.replace("(((prob" + str(count+1) + ")))", problems.pop())
+    quiz = quiz.replace("Speed Trig Quiz", title)
     return build_pdf(quiz)
-    # tmp = tempfile.NamedTemporaryFile(suffix=".tex", dir=join(dirname(abspath(__file__)), "tmp/"), delete=False)
-    # tmp.write(quiz.encode())
-    # tmp.close()
-    # tmpfile = FIND_FILE.search(tmp.name).group(1)
+
     # folder = join(dirname(abspath(__file__)), "tmp/", tmpfile)
     # filename = join(folder, tmpfile + ".pdf")
     # mkdir(folder)
@@ -89,17 +89,16 @@ def get_func_inputs(funcs, outRange, rangeInfo=(0, False)):
     if not outRange:
         rng = [True]*12
     for index, item in enumerate(res):
-        if any(item in x for x in (TRIG_BASE, TRIG_RECI)):
-            output.add(item + get_rand_rad(rng[index]))
-            while len(output) != index + 1:
+        while len(output) != index + 1:
+            if any(item in x for x in (TRIG_BASE, TRIG_RECI)):
                 output.add(item + get_rand_rad(rng[index]))
+            if item in TRIG_INV_BASE:
+                if item == r"\arctan": output.add(item + "{(" +get_rand_frac(False, True) + ")}")
+                else: output.add(item + "{(" +get_rand_frac() + ")}")
+            if item in TRIG_INV_RECI:
+                if item == r"\arccot": output.add(item + "{(" +  get_rand_frac(True, True) + ")}")
+                else: output.add(item + "{(" + get_rand_frac(True, False) + ")}")
     return output
-
-
-
-
-def get_rand_frac():
-    return
 
 ###### Generates a random fraction (multiple of π/4 or π/6) given whether the output should be within [0, 2π) ######
 # [INPUT 1: norm (bool)] True if output should be within [0, 2π), else False
@@ -109,6 +108,15 @@ def get_rand_rad(norm=True):
         return get_frac(choice(NORM_NUMER[curDenom]), curDenom)
     else:
         return get_frac(choice(NORM_NUMER[curDenom]) + (-1 if randint(0, 1) == 0 else 1) * 2 * curDenom, curDenom)
+
+###### Generates
+def get_rand_frac(inv=False, tan=False):
+    if tan:
+        if inv: return choice(ARCCOT)
+        else: return choice(ARCTAN)
+    else:
+        if inv: return choice(ARCCSC_SEC)
+        else: return choice(ARCSIN_COS)
 
 
 ###### Formats latex fraction based on inputs. ######

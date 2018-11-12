@@ -7,11 +7,11 @@ def app():
     return SpeedTrig.app
 
 def test_norm_reci(client):
-    response = client.post('generated-quiz', data=dict(norm=True, reci=False, inc=False, Override=False, chance=40, num=2))
+    response = client.post('generated-quiz', data=dict(title="Speed Trig Quiz", norm=True, reci=False, inc=False, Override=False, chance=40, num=2))
     assert response.status_code == 200
 
 def test_out_range(client):
-    response = client.post('generated-quiz', data=dict(norm=True, reci=True, inc=True, Override=False, chance=40, num=2))
+    response = client.post('generated-quiz', data=dict(title="Speed Trig Quiz #3", norm=True, reci=True, inc=True, Override=False, chance=40, num=2))
     assert response.status_code == 200
 
 def test_blank(client):
