@@ -138,9 +138,8 @@ def get_frac(numer, denom):
 ###### Replaces/escapes latex special characters for title. ######
 # [INPUT 1: title (String)] Title
 def esc_title(title):
-    for key, value in LATEX_SPC_CHAR.items():
-        title = title.replace(key, value)
-    return title
+    return re.sub('|'.join(re.escape(key) for key in LATEX_SPC_CHAR.keys()),
+                  lambda k: LATEX_SPC_CHAR[k.group(0)], title)
 
 def test_tex(enabled, outRange, rangeNum, chOrAmt):
     problems = get_problems(enabled, outRange, rangeNum, chOrAmt)
