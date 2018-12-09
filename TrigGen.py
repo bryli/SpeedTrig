@@ -27,8 +27,8 @@ ARCCSC_SEC = ("-1", r"-\frac{2\sqrt{3}}{3}", r"-\sqrt{2}", "-2", "\infty",
 DENOM = (1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 6, 6, 6, 6, 6, 6)
 NORM_NUMER = {1:(0, 1), 2:(1, 3), 3:(1, 2, 4, 5), 4:(1, 3, 5, 7), 6:(1, 3, 5, 7, 9, 11)}
 
-LATEX_SPC_CHAR = {r"&":r"\&", r"%":r"\%", r"$":r"\$", r"#":r"\#", r"_":r"\_", r"{":r"\{",
-                  r"}":r"\}", r"~":r"\textasciitilde{}", r"^":r"\textasciicircum{}", "\\":r"\textbackslash{}"}
+LATEX_SPC_CHAR = {"\\":r"\textbackslash{}", r"&":r"\&", r"%":r"\%", r"$":r"\$", r"#":r"\#", r"_":r"\_",
+                  r"{":r"\{", r"}":r"\}", r"~":r"\textasciitilde{}", r"^":r"\textasciicircum{}"}
 
 #### Creates the PDF based on the output of the get_problems function.
 # [ALL INPUTS] Equivalent to that of method `get_problems`.
