@@ -27,6 +27,9 @@ ARCCSC_SEC = ("-1", r"-\frac{2\sqrt{3}}{3}", r"-\sqrt{2}", "-2", "\infty",
 DENOM = (1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 6, 6, 6, 6, 6, 6)
 NORM_NUMER = {1:(0, 1), 2:(1, 3), 3:(1, 2, 4, 5), 4:(1, 3, 5, 7), 6:(1, 3, 5, 7, 9, 11)}
 
+LATEX_SPC_CHAR = {r"&":r"\&", r"%":r"\%", r"$":r"\$", r"#":r"\#", r"_":r"\_", r"{":r"\{",
+                  r"}":r"\}", r"~":r"\textasciitilde{}", r"^":r"\textasciicircum{}", "\\":r"\textbackslash{}"}
+
 #### Creates the PDF based on the output of the get_problems function.
 # [ALL INPUTS] Equivalent to that of method `get_problems`.
 def create_tex(title, enabled, outRange, rangeNum, chOrAmt=True):
@@ -37,6 +40,7 @@ def create_tex(title, enabled, outRange, rangeNum, chOrAmt=True):
         quiz = file.read().decode()
     for count in range(12):
         quiz = quiz.replace("(((prob" + str(count+1) + ")))", problems.pop())
+    title = esc_title(title)
     quiz = quiz.replace("Speed Trig Quiz", title)
     return build_pdf(quiz)
 
@@ -131,6 +135,12 @@ def get_frac(numer, denom):
         return "(" + (str(frac.numerator) if frac.numerator not in (1, -1) else "") + r"\pi)"
     return (r"{(\frac{" + (str(frac.numerator) if frac.numerator not in (1, -1) else "") if frac.numerator > 0 else (r"{(-\frac{" + (str(abs(frac.numerator)) if frac.numerator not in (1, -1) else ""))) + r"\pi}{" + str(frac.denominator) + "})}"
 
+###### Replaces/escapes latex special characters for title. ######
+# [INPUT 1: title (String)] Title
+def esc_title(title):
+    for key, value in LATEX_SPC_CHAR.items():
+        title = title.replace(key, value)
+    return title
 
 def test_tex(enabled, outRange, rangeNum, chOrAmt):
     problems = get_problems(enabled, outRange, rangeNum, chOrAmt)

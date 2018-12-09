@@ -12,8 +12,6 @@ def home():
 @app.route('/generated-quiz', methods=['GET', 'POST'])
 def generated():
 
-    print(request.form)
-
     ### Title is a string used to create worksheet title text.
     if "title" in request.form:
         title = request.form["title"]
