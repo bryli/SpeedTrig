@@ -32,7 +32,7 @@ LATEX_SPC_CHAR = {"\\":r"\textbackslash{}", r"&":r"\&", r"%":r"\%", r"$":r"\$", 
 
 #### Creates the PDF based on the output of the get_problems function.
 # [ALL INPUTS] Equivalent to that of method `get_problems`.
-def create_tex(title, enabled, outRange, rangeNum, chOrAmt=True):
+def create_tex(title, enabled, outRange, rangeNum, timesNewRoman, chOrAmt=True):
     problems = get_problems(enabled, outRange, rangeNum, chOrAmt)
     if problems == ('', 204):
         return ('', 204)
@@ -42,6 +42,7 @@ def create_tex(title, enabled, outRange, rangeNum, chOrAmt=True):
         quiz = quiz.replace("(((prob" + str(count+1) + ")))", problems.pop())
     title = esc_title(title)
     quiz = quiz.replace("Speed Trig Quiz", title)
+    quiz = quiz.replace("%TIMES NEW ROMAN", r"\usepackage{mathptmx}") if timesNewRoman else quiz
     return build_pdf(quiz)
 
     # folder = join(dirname(abspath(__file__)), "tmp/", tmpfile)

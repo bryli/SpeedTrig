@@ -51,6 +51,8 @@ def generated():
         inc = False
     print(inc)
 
+    timesNewRoman = "timesnewroman" in request.form
+
     ### override is a Boolean for whether the user wants exact number or percent chance.
     # True if % chance
     # False if exact number wanted
@@ -74,12 +76,12 @@ def generated():
 
     dl = "dl" in request.form
     if app.config['TESTING']:
-        quiz = TrigGen.test_tex([norm, reci, invnorm, invreci], inc, num, override)
+        quiz = TrigGen.test_tex([norm, reci, invnorm, invreci], inc, num, timesNewRoman, override)
         if quiz == ('', 204):
             return ('', 204)
         return send_file(BytesIO(quiz), as_attachment=dl, mimetype="text/x-tex",
                                  attachment_filename="Speed Trig Quiz"+datetime.now().strftime(" %Y-%m-%d at %H.%M.%S.pdf"))
-    quiz = TrigGen.create_tex(title, [norm, reci, invnorm, invreci], inc, num, override)
+    quiz = TrigGen.create_tex(title, [norm, reci, invnorm, invreci], inc, num, timesNewRoman, override)
     if quiz == ('', 204):
         return ('', 204)
 
