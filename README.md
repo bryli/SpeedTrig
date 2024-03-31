@@ -10,7 +10,10 @@ This Speed Trig quiz generator is a Flask application meant to automatically gen
 
 ## To Get Started
 
+Make sure to download and install any compatible LaTeX distribution (this app uses [https://github.com/mbr/latex](the latex package)), and make sure it is in your environment.
+
 Go to directory and run `pip install -r requirements.txt`:
+
 `cd ~/download_location/SpeedTrig/ && pip install -r requirements.txt`
 
 To start the application, from the same directory run `export FLASK_APP=SpeedTrig.py` then `flask run`.

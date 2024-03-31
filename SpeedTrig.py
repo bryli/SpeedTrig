@@ -80,14 +80,14 @@ def generated():
         if quiz == ('', 204):
             return ('', 204)
         return send_file(BytesIO(quiz), as_attachment=dl, mimetype="text/x-tex",
-                                 attachment_filename="Speed Trig Quiz"+datetime.now().strftime(" %Y-%m-%d at %H.%M.%S.pdf"))
+                                 download_name="Speed Trig Quiz"+datetime.now().strftime(" %Y-%m-%d at %H.%M.%S.pdf"))
     quiz = TrigGen.create_tex(title, [norm, reci, invnorm, invreci], inc, num, timesNewRoman, override)
     if quiz == ('', 204):
         return ('', 204)
 
     return send_file(BytesIO(bytes(quiz)),
                      mimetype="application/pdf", as_attachment=dl,
-                     attachment_filename="Speed Trig Quiz"+datetime.now().strftime(" %Y-%m-%d at %H.%M.%S.pdf"))
+                     download_name="Speed Trig Quiz"+datetime.now().strftime(" %Y-%m-%d at %H.%M.%S.pdf"))
 
 
 if __name__ == '__main__':
